@@ -1,4 +1,3 @@
-const { getByCategory } = require("../models/gallery.model");
 const Gallery = require("../models/gallery.model");
 
 exports.create = (req, res) => {
