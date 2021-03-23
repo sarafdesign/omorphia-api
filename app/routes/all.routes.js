@@ -6,15 +6,32 @@ module.exports = (app) => {
   const user = require("../controllers/users.controller");
   const uploadImg = require("../config/upload.config,");
 
+  //CRUD Contact
   app.post("/contact", contact.create);
   app.get("/contact", contact.getAll);
+  app.delete("/contact/:contactId", contact.delete);
+  app.put("/contact/:contactId", contact.update);
+
+  //CRUD Category
   app.post("/category", category.create);
   app.get("/category", category.getAll);
+  app.delete("/category/:categoryId", category.delete);
+  app.put("/category/:categoryId", category.update);
+
+  //CRUD Gallery
   app.post("/gallery", gallery.create);
   app.get("/gallery", gallery.getAll);
   app.get("/gallery/category/:categoryNama", gallery.getByCategory);
+  app.delete("/gallery/:galleryId", gallery.delete);
+  app.put("/gallery/:galleryId", gallery.update);
+
+  //CRUD Images
   app.post("/images", uploadImg.uploadImg, images.create);
   app.get("/images/gallery/:galleryNama", images.getByGallery);
+  app.delete("/images/gallery/:galleryNama/:imagesId", images.delete);
+  app.put("/images/gallery/:imagesId", uploadImg.uploadImg, images.update);
+
+  //CRUD User
   app.post("/register", user.create);
   app.get("/user/:userNama", user.getByUser);
   app.post("/signin", user.signin);

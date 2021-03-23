@@ -30,4 +30,34 @@ Contact.getAll = (result) => {
   });
 };
 
+Contact.delete = function (contactId, result) {
+  sql.query(
+    "DELETE FROM contact WHERE id = ?",
+    [contactId],
+    function (err, res) {
+      if (err) {
+        console.log ("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Contact.update = function (contactId, contact, result) {
+  sql.query(
+    "UPDATE contact SET email=?, name=?, message=? WHERE id=?",
+    [contact.email, contact.name, contact.message, contactId],
+    function (err, res) {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
 module.exports = Contact;

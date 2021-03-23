@@ -31,4 +31,34 @@ Category.getAll = (result) => {
   });
 };
 
+Category.delete = function (categoryId, result) {
+  sql.query(
+    "DELETE FROM category WHERE id_category = ?",
+    [categoryId],
+    function (err, res) {
+      if (err) {
+        console.log ("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Category.update = function (categoryId, category, result) {
+  sql.query(
+    "UPDATE category SET category_nama=? WHERE id_category=?",
+    [category.category_nama, categoryId],
+    function (err, res) {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
 module.exports = Category;

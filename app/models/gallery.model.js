@@ -54,4 +54,35 @@ Gallery.getByCategory = (categoryNama, result) => {
     }
   );
 };
+
+Gallery.delete = function (galleryId, result) {
+  sql.query(
+    "DELETE FROM gallery WHERE id_gallery = ?",
+    [galleryId],
+    function (err, res) {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Gallery.update = function (galleryId, gallery, result) {
+  sql.query(
+    "UPDATE gallery SET nama=?, deskripsi=? WHERE id_gallery=?",
+    [gallery.nama, gallery.deskripsi, galleryId],
+    function (err, res) {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
 module.exports = Gallery;

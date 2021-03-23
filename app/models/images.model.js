@@ -42,4 +42,34 @@ Images.getByGallery = (galleryNama, result) => {
   );
 };
 
+Images.deleteByGallery = function (galleryNama, imagesId, result) {
+  sql.query(
+    "DELETE FROM images WHERE id_gallery = ? AND id_images = ?",
+    [galleryNama, imagesId],
+    function (err, res) {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Images.updateByGallery = function (imagesId, images, result) {
+  sql.query(
+    "UPDATE images SET id_gallery=?, images_nama=?, file=? WHERE id_images=?",
+    [images.id_gallery, images.images_nama, images.file, imagesId],
+    function (err, res) {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
 module.exports = Images;

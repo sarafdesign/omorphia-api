@@ -100,7 +100,7 @@ exports.signin = function (req, res) {
             });
           } else {
             var token = jwt.sign({ nama_user: results[0].nama_user }, config.secret, {
-              expiresIn: 86400, // 24 hours
+              expiresIn: 3600, // 1 hour
             });
 
             res.status(200).send({
