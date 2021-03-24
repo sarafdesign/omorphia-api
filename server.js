@@ -13,6 +13,7 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use('/uploads', express.static('./app/uploads'))
 
 app.get("/", (req, res) => {
   res.json({ message: "Selamat datang di omorphia API." });

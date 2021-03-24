@@ -11,7 +11,7 @@ exports.create = (req, res) => {
   const images = new Images({
     id_gallery: req.body.id_gallery,
     images_nama: req.body.images_nama,
-    file: req.file,
+    file: req.file.filename,
   });
 
   Images.create(images, (err, data) => {
@@ -51,7 +51,7 @@ exports.update = function (req, res) {
   const images = new Images({
     id_gallery: req.body.id_gallery,
     images_nama: req.body.images_nama,
-    file: req.file,
+    file: req.file.filename,
   });
 
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
