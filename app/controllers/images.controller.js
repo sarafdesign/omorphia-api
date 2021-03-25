@@ -23,6 +23,16 @@ exports.create = (req, res) => {
   });
 };
 
+exports.getAll = (req, res) => {
+  Images.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Ada error ketika memanggil gallery",
+      });
+    else res.send(data);
+  });
+};
+
 exports.getByGallery = (req, res) => {
   Images.getByGallery(req.params.galleryNama, (err, data) => {
     if (err) {
@@ -32,8 +42,7 @@ exports.getByGallery = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message:
-            "Error retrieving Images with id " + req.params.galleryNama,
+          message: "Error retrieving Images with id " + req.params.galleryNama,
         });
       }
     } else res.send(data);
@@ -41,11 +50,33 @@ exports.getByGallery = (req, res) => {
 };
 
 exports.delete = function (req, res) {
-  Images.deleteByGallery(req.params.galleryNama, req.params.imagesId, function (err, data) {
+  Images.deleteFile(
+    req.params.imagesNama,
+    function (err, data) {
+      if (err) res.send(err);
+      // res.json({ message: "Bisa dong" });
+    }
+  );
+  Images.deleteByGallery(req.params.imagesId, function (err, data) {
     if (err) res.send(err);
-    res.json({ message: "Bisa dong" });
+    res.json({ message: "Oke" });
   });
 };
+
+// exports.delete = function (req, res) {
+//   Images.deleteByGallery(
+//     req.params.galleryNama,
+//     req.params.imagesId,
+//     function (err, data) {
+//       if (err) res.send(err);
+//       Images.deleteFile(req.params.imagesId, function (err, data) {
+//         if (err) res.send(err);
+//         res.json({ message: "Oke" });
+//       });
+//       // res.json({ message: "Bisa dong" });
+//     }
+//   );
+// };
 
 exports.update = function (req, res) {
   const images = new Images({
@@ -55,10 +86,19 @@ exports.update = function (req, res) {
   });
 
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    res
-      .status(400)
-      .send({ error: true, message: "ANJENG KENAPA KESINI TERUS ||| Please provide all required field" });
+    res.status(400).send({
+      error: true,
+      message:
+        "ANJENG KENAPA KESINI TERUS ||| Please provide all required field",
+    });
   } else {
+    Images.deleteFile(
+      req.params.imagesNama,
+      function (err, data) {
+        if (err) res.send(err);
+        // res.json({ message: "Bisa dong" });
+      }
+    );
     Images.updateByGallery(req.params.imagesId, images, function (err, images) {
       if (err) res.send(err);
       res.json({ error: false, message: "Images successfully updated" });

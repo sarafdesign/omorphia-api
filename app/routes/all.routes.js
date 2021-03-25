@@ -27,9 +27,10 @@ module.exports = (app) => {
 
   //CRUD Images
   app.post("/images", uploadImg.uploadImg, images.create);
+  app.get("/images/gallery/", images.getAll);
   app.get("/images/gallery/:galleryNama", images.getByGallery);
-  app.delete("/images/gallery/:galleryNama/:imagesId", images.delete);
-  app.put("/images/gallery/:imagesId", uploadImg.uploadImg, images.update);
+  app.delete("/images/gallery/:imagesNama/:imagesId", images.delete);
+  app.put("/images/gallery/:imagesNama/:imagesId", uploadImg.uploadImg, images.update);
 
   //CRUD User
   app.post("/register", user.create);

@@ -23,7 +23,7 @@ Gallery.create = (newGallery, result) => {
 };
 
 Gallery.getAll = (result) => {
-  sql.query("SELECT * FROM gallery", (err, res) => {
+  sql.query("SELECT * FROM gallery g JOIN category c ON g.id_category = c.id_category", (err, res) => {
     if (err) {
       console.log("error:", err);
       result(err, null);
