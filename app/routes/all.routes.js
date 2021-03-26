@@ -5,6 +5,7 @@ module.exports = (app) => {
   const images = require("../controllers/images.controller");
   const user = require("../controllers/users.controller");
   const uploadImg = require("../config/upload.config,");
+  const authJwt = require("../middlewares/authJwt")
 
   //CRUD Contact
   app.post("/contact", contact.create);
@@ -27,13 +28,19 @@ module.exports = (app) => {
 
   //CRUD Images
   app.post("/images", uploadImg.uploadImg, images.create);
-  app.get("/images/gallery/", images.getAll);
+  app.get("/images/gallery/", authJwt.verifyToken, images.getAll);
   app.get("/images/gallery/:galleryNama", images.getByGallery);
   app.delete("/images/gallery/:imagesNama/:imagesId", images.delete);
-  app.put("/images/gallery/:imagesNama/:imagesId", uploadImg.uploadImg, images.update);
+  app.put(
+    "/images/gallery/:imagesNama/:imagesId",
+    uploadImg.uploadImg,
+    images.update
+  );
+  app.get("/images/:imagesId", images.getByImagesId);
 
   //CRUD User
   app.post("/register", user.create);
   app.get("/user/:userNama", user.getByUser);
   app.post("/signin", user.signin);
+  // app.get("/signout", user.signout);
 };

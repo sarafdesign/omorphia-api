@@ -49,6 +49,22 @@ exports.getByGallery = (req, res) => {
   });
 };
 
+exports.getByImagesId = (req, res) => {
+  Images.getByImagesId(req.params.imagesId, (err, data) => {
+    if (err) {
+      if (err.kind === "no_data") {
+        res.status(404).send({
+          message: `Not found Images with id ${req.params.imagesId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Images with id " + req.params.imagesId,
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 exports.delete = function (req, res) {
   Images.deleteFile(
     req.params.imagesNama,

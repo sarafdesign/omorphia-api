@@ -130,5 +130,12 @@ exports.signin = function (req, res) {
   );
 };
 
+// exports.signout = function (req, res) {
+//   const token = jwt.destroy(token);
+
+//   res.status(200).send({
+//     accessToken: token,
+//   });
+// }
 
 

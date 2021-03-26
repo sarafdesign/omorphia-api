@@ -64,6 +64,28 @@ Images.getByGallery = (galleryNama, result) => {
   );
 };
 
+Images.getByImagesId = (imagesId, result) => {
+  sql.query(
+    `SELECT * FROM images where id_images = "${imagesId}"`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        console.log("ditemukan: ", res);
+        result(null, res);
+        console.log(res.file);
+        return;
+      }
+
+      result({ kind: "no_data" }, null);
+    }
+  );
+};
+
 Images.deleteByGallery = function (imagesId, result) {
   sql.query(
     "DELETE FROM images WHERE id_images = ?",
