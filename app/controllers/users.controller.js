@@ -75,6 +75,16 @@ exports.getByUser = (req, res) => {
   });
 };
 
+exports.getAll = (req, res) => {
+  User.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Ada error ketika memanggil gallery",
+      });
+    else res.send(data);
+  });
+};
+
 exports.signin = function (req, res) {
   var nama_user = req.body.nama_user;
   sql.query(

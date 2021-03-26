@@ -49,6 +49,23 @@ exports.getByCategory = (req, res) => {
   });
 };
 
+exports.getByGalleryId = (req, res) => {
+  Gallery.getByGalleryId(req.params.galleryId, (err, data) => {
+    if (err) {
+      if (err.kind === "no_data") {
+        res.status(404).send({
+          message: `Not found Gallery with id ${req.params.galleryId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message:
+            "Error retrieving Gallery with id " + req.params.galleryId,
+        });
+      }
+    } else res.send(data);
+  });
+};
+
 exports.delete = function (req, res) {
   Gallery.delete(req.params.galleryId, function (err, data) {
     if (err) res.send(err);

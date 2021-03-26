@@ -70,6 +70,21 @@ Gallery.delete = function (galleryId, result) {
   );
 };
 
+Gallery.getByGalleryId = function (galleryId, result) {
+  sql.query(
+    "SELECT * FROM gallery WHERE id_gallery = ?",
+    [galleryId],
+    function (err, res) {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
 Gallery.update = function (galleryId, gallery, result) {
   sql.query(
     "UPDATE gallery SET nama=?, deskripsi=? WHERE id_gallery=?",

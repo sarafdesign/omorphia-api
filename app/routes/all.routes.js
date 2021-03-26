@@ -18,6 +18,7 @@ module.exports = (app) => {
   app.get("/category", category.getAll);
   app.delete("/category/:categoryId", category.delete);
   app.put("/category/:categoryId", category.update);
+  app.get("/category/:categoryId", category.getByCategoryId);
 
   //CRUD Gallery
   app.post("/gallery", gallery.create);
@@ -25,10 +26,11 @@ module.exports = (app) => {
   app.get("/gallery/category/:categoryNama", gallery.getByCategory);
   app.delete("/gallery/:galleryId", gallery.delete);
   app.put("/gallery/:galleryId", gallery.update);
+  app.get("/gallery/:galleryId", gallery.getByGalleryId);
 
   //CRUD Images
   app.post("/images", uploadImg.uploadImg, images.create);
-  app.get("/images/gallery/", authJwt.verifyToken, images.getAll);
+  app.get("/images/gallery/", images.getAll);
   app.get("/images/gallery/:galleryNama", images.getByGallery);
   app.delete("/images/gallery/:imagesNama/:imagesId", images.delete);
   app.put(
@@ -40,6 +42,7 @@ module.exports = (app) => {
 
   //CRUD User
   app.post("/register", user.create);
+  app.get("/checkUser", authJwt.verifyToken);
   app.get("/user/:userNama", user.getByUser);
   app.post("/signin", user.signin);
   // app.get("/signout", user.signout);

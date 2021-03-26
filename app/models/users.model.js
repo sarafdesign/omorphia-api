@@ -56,6 +56,18 @@ User.create = (newUser, result) => {
   });
 };
 
+User.getAll = (result) => {
+  sql.query("SELECT * FROM user", (err, res) => {
+    if (err) {
+      console.log("error:", err);
+      result(err, null);
+      return;
+    }
+    console.log("user yang terambil:", res);
+    result(null, res);
+  });
+};
+
 User.getByUser = (userNama, result) => {
   sql.query(
     `SELECT * FROM USER WHERE nama_user = "${userNama}"`,
