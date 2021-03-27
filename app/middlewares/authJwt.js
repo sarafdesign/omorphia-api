@@ -4,9 +4,9 @@ const config = require("../config/auth.config.js");
 verifyToken = (req, res, next) => {
   // let token = req.headers['x-access-token'];
   // let token = req.header('x-access-token')
-  let token = req.cookies.token;
-  // const authHeader = req.headers['authorization']
-  // const token = authHeader && authHeader.split(' ')[1]
+  // let token = req.cookies.token;
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
 
   if (!token) {
     // return res.status(401).end();
@@ -21,11 +21,11 @@ verifyToken = (req, res, next) => {
         message: "Unauthorized!",
       });
     }
-    return res.status(200).send({
-      message: "Success",
-    });
-    // req.id_user = decoded.id;
-    // next();
+    // return res.status(200).send({
+    //   message: "Success",
+    // });
+    req.id_user = decoded.id;
+    next();
   });
 };
 

@@ -21,16 +21,6 @@
 //   });
 // };
 
-// exports.getAll = (req, res) => {
-//   User.getAll((err, data) => {
-//     if (err)
-//       res.status(500).send({
-//         message: err.message || "Ada error ketika memanggil user",
-//       });
-//     else res.send(data);
-//   });
-// };
-
 const sql = require("../models/db");
 const User = require("../models/users.model");
 const config = require("../config/auth.config");
@@ -59,6 +49,16 @@ exports.create = (req, res) => {
   });
 };
 
+exports.getAll = (req, res) => {
+  User.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Ada error ketika memanggil user",
+      });
+    else res.send(data);
+  });
+};
+
 exports.getByUser = (req, res) => {
   User.getByUser(req.params.userNama, (err, data) => {
     if (err) {
@@ -72,16 +72,6 @@ exports.getByUser = (req, res) => {
         });
       }
     } else res.send(data);
-  });
-};
-
-exports.getAll = (req, res) => {
-  User.getAll((err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || "Ada error ketika memanggil gallery",
-      });
-    else res.send(data);
   });
 };
 

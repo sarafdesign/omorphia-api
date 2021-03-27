@@ -42,7 +42,7 @@ module.exports = (app) => {
 
   //CRUD User
   app.post("/register", user.create);
-  app.get("/checkUser", authJwt.verifyToken);
+  app.get("/checkUser", authJwt.verifyToken, user.getAll);
   app.get("/user/:userNama", user.getByUser);
   app.post("/signin", user.signin);
   // app.get("/signout", user.signout);
