@@ -1,5 +1,6 @@
 const Images = require("../models/images.model");
 const path = require("path");
+const sharp = require("sharp");
 
 exports.create = (req, res) => {
   if (!req.body) {
@@ -19,8 +20,27 @@ exports.create = (req, res) => {
       res.status(500).send({
         message: err.message || "Ada error ketika memasukkan images",
       });
-    else res.send(data);
+    // console.log(req.file);
+    else
+      sharp("./" + req.file.path)
+        .toBuffer()
+        .then((data) => {
+          sharp(data)
+            // .toFormat("png")
+            // .resize(1080)
+            .png({ progressive: true, compressionLevel: 5 })
+            .jpeg({progressive: true, quality: 50})
+            .toFile("./" + req.file.path, (err, info) => {
+              console.log("oke");
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    res.send(data);
   });
+  //   res.send(data);
+  // });
 };
 
 exports.getAll = (req, res) => {
@@ -66,13 +86,10 @@ exports.getByImagesId = (req, res) => {
 };
 
 exports.delete = function (req, res) {
-  Images.deleteFile(
-    req.params.imagesNama,
-    function (err, data) {
-      if (err) res.send(err);
-      // res.json({ message: "Bisa dong" });
-    }
-  );
+  Images.deleteFile(req.params.imagesNama, function (err, data) {
+    if (err) res.send(err);
+    // res.json({ message: "Bisa dong" });
+  });
   Images.deleteByGallery(req.params.imagesId, function (err, data) {
     if (err) res.send(err);
     res.json({ message: "Oke" });
@@ -108,13 +125,10 @@ exports.update = function (req, res) {
         "ANJENG KENAPA KESINI TERUS ||| Please provide all required field",
     });
   } else {
-    Images.deleteFile(
-      req.params.imagesNama,
-      function (err, data) {
-        if (err) res.send(err);
-        // res.json({ message: "Bisa dong" });
-      }
-    );
+    Images.deleteFile(req.params.imagesNama, function (err, data) {
+      if (err) res.send(err);
+      // res.json({ message: "Bisa dong" });
+    });
     Images.updateByGallery(req.params.imagesId, images, function (err, images) {
       if (err) res.send(err);
       res.json({ error: false, message: "Images successfully updated" });
