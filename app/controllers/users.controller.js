@@ -105,13 +105,24 @@ exports.signin = function (req, res) {
 
           if (!passwordIsValid) {
             return res.status(401).send({
+              status: false,
               accessToken: null,
               message: "Invalid Password!",
             });
           } else {
-            var token = jwt.sign({ nama_user: results[0].nama_user }, config.secret, {
-              expiresIn: 3600, // 1 hour
-            });
+            var token = jwt.sign(
+              { nama_user: results[0].nama_user },
+              config.secret,
+              {
+                expiresIn: 3600, // 1 hour
+                // expiresIn: 60, // 1 minutes
+              }
+            );
+            res.cookie("token", token, { maxAge: 3600 * 1000 })
+            // res.header("auth-token", token).json({
+            //   error: null,
+            //   data: { token },
+            // });
 
             res.status(200).send({
               nama_user: results[0].nama_user,
@@ -130,7 +141,7 @@ exports.signin = function (req, res) {
           //   });
           // }
         } else {
-          res.json({
+          res.status(401).send({
             status: false,
             message: "User does not exits",
           });
@@ -147,5 +158,3 @@ exports.signin = function (req, res) {
 //     accessToken: token,
 //   });
 // }
-
-
