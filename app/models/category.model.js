@@ -46,6 +46,27 @@ Category.delete = function (categoryId, result) {
   );
 };
 
+Category.getByCategoryID = (categoryId, result) => {
+  sql.query(
+    `SELECT * FROM category WHERE id_category = "${categoryId}"`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        console.log("ditemukan: ", res);
+        result(null, res);
+        return;
+      }
+
+      result({ kind: "no_data" }, null);
+    }
+  );
+};
+
 Category.update = function (categoryId, category, result) {
   sql.query(
     "UPDATE category SET category_nama=? WHERE id_category=?",

@@ -23,7 +23,7 @@ Gallery.create = (newGallery, result) => {
 };
 
 Gallery.getAll = (result) => {
-  sql.query("SELECT * FROM gallery", (err, res) => {
+  sql.query("SELECT * FROM gallery g JOIN category c ON g.id_category = c.id_category", (err, res) => {
     if (err) {
       console.log("error:", err);
       result(err, null);
@@ -58,6 +58,21 @@ Gallery.getByCategory = (categoryNama, result) => {
 Gallery.delete = function (galleryId, result) {
   sql.query(
     "DELETE FROM gallery WHERE id_gallery = ?",
+    [galleryId],
+    function (err, res) {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+      } else {
+        result(null, res);
+      }
+    }
+  );
+};
+
+Gallery.getByGalleryId = function (galleryId, result) {
+  sql.query(
+    "SELECT * FROM gallery WHERE id_gallery = ?",
     [galleryId],
     function (err, res) {
       if (err) {

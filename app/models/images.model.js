@@ -21,9 +21,9 @@ Images.create = (newImages, result) => {
   });
 };
 
-Images.getByGallery = (galleryNama, result) => {
+Images.getAll = (result) => {
   sql.query(
-    `SELECT * FROM images JOIN gallery ON gallery.id_gallery = images.id_gallery where gallery.id_gallery = "${galleryNama}"`,
+    `SELECT * FROM images JOIN gallery ON gallery.id_gallery = images.id_gallery`,
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -42,19 +42,82 @@ Images.getByGallery = (galleryNama, result) => {
   );
 };
 
-Images.deleteByGallery = function (galleryNama, imagesId, result) {
+Images.getByGallery = (galleryNama, result) => {
   sql.query(
-    "DELETE FROM images WHERE id_gallery = ? AND id_images = ?",
-    [galleryNama, imagesId],
+    `SELECT * FROM images JOIN gallery ON gallery.id_gallery = images.id_gallery where gallery.id_gallery = "${galleryNama}"`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        console.log("ditemukan: ", res);
+        result(null, res);
+        console.log(res.file);
+        return;
+      }
+
+      result({ kind: "no_data" }, null);
+    }
+  );
+};
+
+Images.getByImagesId = (imagesId, result) => {
+  sql.query(
+    `SELECT * FROM images where id_images = "${imagesId}"`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        console.log("ditemukan: ", res);
+        result(null, res);
+        console.log(res.file);
+        return;
+      }
+
+      result({ kind: "no_data" }, null);
+    }
+  );
+};
+
+Images.deleteByGallery = function (imagesId, result) {
+  sql.query(
+    "DELETE FROM images WHERE id_images = ?",
+    [imagesId],
     function (err, res) {
       if (err) {
         console.log("error: ", err);
         result(null, err);
-      } else {
-        result(null, res);
-      }
+      } else result(null, res);
     }
   );
+};
+
+Images.deleteFile = (imagesNama, result) => {
+  const path = "./app/uploads/";
+  const fs = require("fs");
+
+  fs.unlink(path + imagesNama + ".jpg", (err) => {
+    if (err) {
+      fs.unlink(path + imagesNama + ".jpeg", (err) => {
+        if (err) {
+          fs.unlink(path + imagesNama + ".png", (err) => {
+            if (err) {
+              console.log("failed to delete local image:" + err);
+            }
+          });
+        }
+      });
+    } else {
+      console.log("successfully deleted local image");
+    }
+  });
 };
 
 Images.updateByGallery = function (imagesId, images, result) {

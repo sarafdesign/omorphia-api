@@ -21,16 +21,6 @@
 //   });
 // };
 
-// exports.getAll = (req, res) => {
-//   User.getAll((err, data) => {
-//     if (err)
-//       res.status(500).send({
-//         message: err.message || "Ada error ketika memanggil user",
-//       });
-//     else res.send(data);
-//   });
-// };
-
 const sql = require("../models/db");
 const User = require("../models/users.model");
 const config = require("../config/auth.config");
@@ -54,6 +44,16 @@ exports.create = (req, res) => {
     if (err)
       res.status(500).send({
         message: err.message || "Ada error yang beb",
+      });
+    else res.send(data);
+  });
+};
+
+exports.getAll = (req, res) => {
+  User.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Ada error ketika memanggil user",
       });
     else res.send(data);
   });
@@ -95,13 +95,24 @@ exports.signin = function (req, res) {
 
           if (!passwordIsValid) {
             return res.status(401).send({
+              status: false,
               accessToken: null,
               message: "Invalid Password!",
             });
           } else {
-            var token = jwt.sign({ nama_user: results[0].nama_user }, config.secret, {
-              expiresIn: 3600, // 1 hour
-            });
+            var token = jwt.sign(
+              { nama_user: results[0].nama_user },
+              config.secret,
+              {
+                expiresIn: 3600, // 1 hour
+                // expiresIn: 60, // 1 minutes
+              }
+            );
+            res.cookie("token", token, { maxAge: 3600 * 1000 })
+            // res.header("auth-token", token).json({
+            //   error: null,
+            //   data: { token },
+            // });
 
             res.status(200).send({
               nama_user: results[0].nama_user,
@@ -120,7 +131,7 @@ exports.signin = function (req, res) {
           //   });
           // }
         } else {
-          res.json({
+          res.status(401).send({
             status: false,
             message: "User does not exits",
           });
@@ -130,5 +141,10 @@ exports.signin = function (req, res) {
   );
 };
 
+// exports.signout = function (req, res) {
+//   const token = jwt.destroy(token);
 
-
+//   res.status(200).send({
+//     accessToken: token,
+//   });
+// }
